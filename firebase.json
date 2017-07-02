@@ -1,0 +1,15 @@
+{
+  "hosting": {
+    "public": "public",
+
+    // Add the following rewrites section *within* "hosting"
+   "rewrites": [ 
+                  {
+                  "source": "/tagLogger", "function": "tagLogger"
+                  },
+                  {
+                  "source": "/getSnippet", "function": "getSnippet"
+                  } 
+              ]
+  }
+}
