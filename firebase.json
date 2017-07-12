@@ -1,15 +1,26 @@
 {
   "hosting": {
     "public": "public",
-
-    // Add the following rewrites section *within* "hosting"
-   "rewrites": [ 
-                  {
-                  "source": "/tagLogger", "function": "tagLogger"
-                  },
-                  {
-                  "source": "/getSnippet", "function": "getSnippet"
-                  } 
-              ]
+    "rewrites": [
+      {
+        "source": "/tagLogger",
+        "function": "tagLogger"
+      },
+      {
+        "source": "/getSnippet",
+        "function": "getSnippet"
+      }
+    ],
+    "headers": [
+      {
+        "source": "**/simoti*",
+        "headers": [
+          {
+            "key": "Cache-Control",
+            "value": "no-cache, no-store, must-revalidate"
+          }
+        ]
+      }
+    ]
   }
 }
