@@ -1,13 +1,13 @@
 (function(){
 
-  report('info', 'root', 'loaded, waiting for ready state');
-
   // Vars
   var waitTime = 0;
   var waitInterval = 10;
   var maxWaitTime = 5000;
   var snippetUrl = 'https://snips.simoti.co/getSnippet';
   var logUrl = 'https://snips.simoti.co/tagLogger';
+
+  report('info', 'root', 'loaded, waiting for ready state');
 
   // Init wait loop
   var canStartInterval = setInterval(function() {
@@ -27,7 +27,7 @@
   function report() {
     console.log('Simoti - report: ', arguments);
     arguments.ts = new Date().valueOf();
-    postRequest('https://us-central1-simoti-171512.cloudfunctions.net/tagLogger', arguments, function(err, result) {
+    postRequest(logUrl, arguments, function(err, result) {
       if(err) {
         console.log('Simoti: Unable to send log', err);
       }
@@ -155,12 +155,24 @@
     var afterElement = afterContainers[afterContainers.length - 1];
 
     if(beforeElement !== afterElement) { // Elements are in different containers
-      for(i = beforeContainers.length - 1, j = afterContainers.length - 1; i >= 0 && j >= 0; i--, j--) {
-        if(beforeContainers[i] === afterContainers[j]) {
-          beforeElement = beforeContainers[i+1];
-          afterElement = afterContainers[i+1];
-          break;
+      // Find common ancestor 
+      i = beforeContainers.length - 1;
+      j = afterContainers.length - 1;
+      // Sync indexes
+      while(beforeContainers[i] !== afterContainers[j] && i >= 0 &&  j>= 0) {
+        if(i < j) {
+          j--;
+        } else if(j < i) {
+          i--;
+        } else {
+          i--;
+          j--;
         }
+      }
+      // Select ancestor
+      if (beforeContainers[i] === afterContainers[j]) {
+        beforeElement = beforeContainers[i + 1];
+        afterElement = afterContainers[i + 1];
       }
     }
 
